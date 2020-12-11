@@ -6,7 +6,7 @@ import {
 	LoaderUtils,
 	Points,
 	PointsMaterial
-} from "/js/three.module.js";
+} from "/Data-Threejs.github.io/js/three.module.js";
 
 var PCDLoader = function ( manager ) {
 

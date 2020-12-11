@@ -10,6 +10,7 @@ let meshs;
 let guiControls;
 
 let video;
+let videotext;
 
 //add material name here first
 let newMaterial, Standard, newStandard, pointsMaterial;
@@ -29,6 +30,9 @@ function init() {
   scene = new THREE.Scene();
 
   video = document.getElementById( 'video' );
+  video.src="models/video.mp4";
+
+
   //raycaster = new THREE.Raycaster();
   //mouse = new THREE.Vector2();
  //scene.background = new THREE.Color( 0x8FBCD4 );
@@ -44,9 +48,9 @@ function init() {
   gui.add(guiControls, 'rotationZ', 0, 1.0 );
 
 
-  createSkybox();
+  //createSkybox();
   getWebcam();
-  //manualSkyBox();
+  manualSkyBox();
   createCamera();
   createControls();
   createLights();
@@ -69,9 +73,10 @@ function init() {
 function createSkybox(){
 
 
-SkyboxTexture = new THREE.CubeTextureLoader()
-  					.setPath( 'textures/' )
-  					.load( [ 'waterSquare.jpg', 'dark-s_nx.jpg', 'dark-s_py.jpg', 'dark-s_ny.jpg', 'dark-s_pz.jpg', 'dark-s_nz.jpg' ] );
+  SkyboxTexture = new THREE.CubeTextureLoader()
+    					.setPath( 'models/MilkyWay/' )
+    					.load( [ 'dark-s_pz.jpg', 'dark-s_nx.jpg', 'dark-s_py.jpg', 'dark-s_ny.jpg', 'dark-s_pz.jpg', 'dark-s_nz.jpg' ] );
+
 //SkyboxTexture.encoding = THREE.sRGBEncoding;
 SkyboxTexture.mapping = THREE.CubeRefractionMapping;
 //other mappings to try:
@@ -91,45 +96,6 @@ scene.background = SkyboxTexture;
 }
 
 
-function manualSkyBox() {
-
-  var textureLoader = new THREE.TextureLoader();
-
-var texture0 = textureLoader.load( 'textures/waterSquare.jpg' );
-var texture1 = textureLoader.load( 'textures/dark-s_px.jpg' );
-var texture2 = textureLoader.load( 'textures/dark-s_nx.jpg' );
-var texture3 = textureLoader.load( 'textures/dark-s_ny.jpg' );
-var texture4 = textureLoader.load( 'textures/dark-s_nz.jpg' );
-var texture5 = textureLoader.load( 'textures/dark-s_ny.jpg' );
-
-
-
-
-var materials = [
-    new THREE.MeshBasicMaterial( { map: VideoTexture } ),
-    new THREE.MeshBasicMaterial( { map: VideoTexture } ),
-    new THREE.MeshBasicMaterial( { map: VideoTexture } ),
-    new THREE.MeshBasicMaterial( { map: VideoTexture } ),
-    new THREE.MeshBasicMaterial( { map: VideoTexture } ),
-    new THREE.MeshBasicMaterial( { map: texture5 } )
-];
-
-  var faceMaterial = new THREE.MeshFaceMaterial( materials );
-
-  faceMaterial.side = THREE.DoubleSide;
-  var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-  var ManualSkyBox = new THREE.Mesh( geometry, faceMaterial );
-  ManualSkyBox.scale.set(1000, 1000, 1000);
-  scene.add( ManualSkyBox );
-
-
-  //Extra Cube for testing Materials Intersection
-  const geometry1 = new THREE.BoxBufferGeometry( 10, 10, 10 );
-  const material1 = new THREE.MeshBasicMaterial( {color: 0x9E4300} );
-  const cube1 = new THREE.Mesh( geometry1, material1 );
-  scene.add( cube1 );
-
-}
 
 function createCamera() {
 
@@ -167,22 +133,29 @@ function createMaterials(){
      newMaterial = new THREE.MeshBasicMaterial( { color: "#9E4300", skinning: true} );
      Standard = new THREE.MeshStandardMaterial( { color: "#9E4300", skinning: true} );
 
-     const loadTexture = new THREE.TextureLoader();
-     const RainbowTexture = loadTexture.load("textures/SupernumeraryRainbows_Entwistle_1362.jpg");
+     // const loadTexture = new THREE.TextureLoader();
+     // const RainbowTexture = loadTexture.load("textures/SupernumeraryRainbows_Entwistle_1362.jpg");
 
      // set the "color space" of the texture
-     RainbowTexture.encoding = THREE.sRGBEncoding;
+     // RainbowTexture.encoding = THREE.sRGBEncoding;
+     //
+     //   // reduce blurring at glancing angles
+     // RainbowTexture.anisotropy = 16;
+     // RainbowTexture.wrapS = RainbowTexture.wrapT = THREE.RepeatWrapping;
+     //
+     // const imgTexture = new THREE.TextureLoader().load( "textures/water.JPG" );
+     // 				imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
+     // 				imgTexture.anisotropy = 16;
 
-       // reduce blurring at glancing angles
-     RainbowTexture.anisotropy = 16;
-     RainbowTexture.wrapS = RainbowTexture.wrapT = THREE.RepeatWrapping;
 
-     const imgTexture = new THREE.TextureLoader().load( "textures/water.JPG" );
-     				imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
-     				imgTexture.anisotropy = 16;
-
-
-    const videotext = new THREE.VideoTexture( video );
+    videotext = new THREE.VideoTexture( video );
+    //Extra Cube for testing Materials Intersection
+    // const geometry1 = new THREE.BoxBufferGeometry( 10, 10, 10 );
+    // const material1 = new THREE.MeshBasicMaterial( {map: videotext} );
+    // const cube1 = new THREE.Mesh( geometry1, material1 );
+    // scene.add( cube1 );
+    video.loop = true;
+    video.play();
 
 
    SkyboxMaterial = new THREE.MeshBasicMaterial( {
@@ -192,7 +165,7 @@ function createMaterials(){
 
 
    newStandard = new THREE.MeshPhongMaterial( {
-										map: RainbowTexture,
+										//map: RainbowTexture,
 										//bumpMap: imgTexture,
 										//bumpScale: 1,
 										//color: diffuseColor,
@@ -236,6 +209,46 @@ function createMaterials(){
 
 
 }
+
+function manualSkyBox() {
+
+  var textureLoader = new THREE.TextureLoader();
+
+  var texture0 = textureLoader.load( 'models/pexels-markus-spiske-1089438.jpg' );
+  var texture1 = textureLoader.load( 'models/pexels-markus-spiske-1089438.jpg' );
+  var texture2 = textureLoader.load( 'models/pexels-markus-spiske-1089438.jpg' );
+  var texture3 = textureLoader.load( 'models/pexels-markus-spiske-1089438.jpg' );
+  var texture4 = textureLoader.load( 'models/pexels-markus-spiske-1089438.jpg' );
+  var texture5 = textureLoader.load( 'models/pexels-markus-spiske-1089438.jpg' );
+
+
+
+
+
+var materials = [
+    new THREE.MeshBasicMaterial( { map: texture0 } ),
+    new THREE.MeshBasicMaterial( { map: texture0 } ),
+    new THREE.MeshBasicMaterial( { map: texture0 } ),
+    new THREE.MeshBasicMaterial( { map: texture0 } ),
+    new THREE.MeshBasicMaterial( { map: texture0 } ),
+    new THREE.MeshBasicMaterial( { map: texture0 } )
+];
+
+scene.background = materials;
+
+  var faceMaterial = new THREE.MeshFaceMaterial( materials );
+
+  faceMaterial.side = THREE.DoubleSide;
+  var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+  var ManualSkyBox = new THREE.Mesh( geometry, faceMaterial );
+  ManualSkyBox.scale.set(1000, 1000, 1000);
+  scene.add( ManualSkyBox );
+
+
+
+
+}
+
 
 function getWebcam(){
 
@@ -303,14 +316,14 @@ function loadModels() {
 
   // load the first model. Each model is loaded asynchronously,
   // so don't make any assumption about which one will finish loading first
-  const Position2 = new THREE.Vector3( -40,0,0 );
-  loader.load( 'models/Amythest_export3_movedorigin.glb', gltf => onLoad( gltf, Position2, newStandard, "MeshName"), onProgress, onError );
+  // const Position2 = new THREE.Vector3( -40,0,0 );
+  // loader.load( 'models/amethyst_crystal/scene.gltf', gltf => onLoad( gltf, Position2, newStandard, "MeshName"), onProgress, onError );
 
   const Position3 = new THREE.Vector3( 0,0, 0 );
-  loader.load( 'models/Amythest_export3_movedorigin.glb', gltf => onLoad( gltf, Position3, SkyboxMaterial, "MeshName1"), onProgress, onError );
+  loader.load( 'models/female_person/scene.gltf', gltf => onLoad( gltf, Position3, SkyboxMaterial, "MeshName1"), onProgress, onError );
 
-  const Position4 = new THREE.Vector3( 40,0, 0 );
-  loader.load( 'models/Amythest_export3_movedorigin.glb', gltf => onLoad( gltf, Position4, refractorySkybox, "MeshName2"), onProgress, onError );
+  // const Position4 = new THREE.Vector3( 40,0, 0 );
+  // loader.load( 'models/amethyst_crystal/scene.gltf', gltf => onLoad( gltf, Position4, refractorySkybox, "MeshName2"), onProgress, onError );
 
 
 }

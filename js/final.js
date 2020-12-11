@@ -1,10 +1,19 @@
 
-let container, stats;
-			let camera, controls, scene, renderer;
+//const Stats = require('js/three.js-master/examples/jsm/libs/stats.module.js');
+//THREE.TrackballControls = import from ('/Data-Threejs.github.io/js/TrackballControls.js')(THREE);
+
+//import Stats from "js/three.js-master/examples/jsm/libs/stats.module.js";
 
 
+let camera, controls, scene, renderer, loader;
+let container, stats, Stats;
 
+			console.log("Before Init")
 			init();
+		//	loadPCD();
+			console.log("After Init")
+			// loadTrack();
+			console.log("Before animate", controls)
 			animate();
 			function init() {
 
@@ -30,43 +39,52 @@ let container, stats;
 				container.appendChild( renderer.domElement );
 
 
-        var loadPCD = function() {
-          //Manager from ThreeJs to track a loader and its status
-          var manager = new THREE.LoadingManager();
-          //Loader for Obj from Three.js
-          var loader = new THREE.PCDLoader(manager);
-          loader.load( 'models/Statues_4.pcd', function ( points ) {
 
-          scene.add( points );
-          const center = points.geometry.boundingSphere.center;
-          controls.target.set( center.x, center.y, center.z );
-          controls.update();
+        	// loader = new THREE.PCDLoader();
+          // loader.load( 'Data-Threejs.github.io/models/Zaghetto.pcd', function ( points ) {
+					//
+          // scene.add( points );
+          // const center = points.geometry.boundingSphere.center;
+          // controls.target.set( center.x, center.y, center.z );
+          // controls.update();
 
           // called when loading is in progresses
-	function error ( xhr ) {
+					// function error ( xhr ) {
+					//
+					// 	console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+					//
+					// }
+					// // called when loading has errors
+					function error1( error ) {
 
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+						console.log( 'An error happened' );
 
-	}
-	// called when loading has errors
-	function error1( error ) {
+					}
 
-		console.log( 'An error happened' );
+				//	console.log("pcdload",loadPCD)
 
-	}
-
-
-
-        } );
-      }
-
+        // } );
 
 
-      var loadTrack = function() {
+
+
+    //var loadTrack = function () {
           //Manager from ThreeJs to track a loader and its status
           // var manager = new THREE.LoadingManager();
           //Loader for Obj from Three.js
-				controls = new TrackballControls(camera,renderer.domElement);
+
+//
+		container = document.createElement( 'div' );
+		    document.body.appendChild( container );
+		    container.appendChild( renderer.domElement );
+//
+
+				// var loadStats = function() {
+				// 	//Manager from ThreeJs to track a loader and its status
+				// 	var manager = new THREE.LoadingManager();
+				// 	//Loader for Obj from Three.js
+
+				controls = new THREE.TrackballControls(camera,renderer.domElement);
 
 				controls.rotateSpeed = 2.0;
 				controls.zoomSpeed = 0.3;
@@ -77,6 +95,7 @@ let container, stats;
 				controls.minDistance = 0.3;
 				controls.maxDistance = 0.3 * 100;
 
+
 				stats = new Stats();
 				container.appendChild( stats.dom );
 
@@ -84,7 +103,8 @@ let container, stats;
 
 				window.addEventListener( 'keypress', keyboard );
 
-			};
+				//};
+				//console.log("Stats = ",stats);
     }
 
 
@@ -126,9 +146,12 @@ let container, stats;
 
 			function animate() {
 
-				requestAnimationFrame( animate );
-			    controls.update();
+				requestAnimationFrame(animate );
+				console.log("test",controls)
+			controls.update();
+
 				renderer.render( scene, camera );
-		      stats.update();
+		   stats.update();
+
 
 			}
