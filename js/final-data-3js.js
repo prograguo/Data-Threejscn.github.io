@@ -26,6 +26,11 @@ const mouse = new THREE.Vector2();
 const mixers = [];
 const clock = new THREE.Clock();
 
+const the_button = document.querySelector(".js-btn")
+const modal = document.querySelector(".modal")
+const closeBtn = document.querySelector(".close")
+
+
 function init() {
 
   container = document.querySelector( '#scene-container' );
@@ -297,11 +302,11 @@ function manualSkyBox() {
 
 var materials = [
     new THREE.MeshBasicMaterial( { map: texture0 } ),
-    new THREE.MeshBasicMaterial( { map: texture0 } ),
-    new THREE.MeshBasicMaterial( { map: texture0 } ),
-    new THREE.MeshBasicMaterial( { map: texture0 } ),
-    new THREE.MeshBasicMaterial( { map: texture0 } ),
-    new THREE.MeshBasicMaterial( { map: texture0 } )
+    new THREE.MeshBasicMaterial( { map: texture1 } ),
+    new THREE.MeshBasicMaterial( { map: texture2 } ),
+    new THREE.MeshBasicMaterial( { map: texture3 } ),
+    new THREE.MeshBasicMaterial( { map: texture4 } ),
+    new THREE.MeshBasicMaterial( { map: texture5 } )
 ];
 
 scene.background = materials;
@@ -546,10 +551,20 @@ function onWindowResize() {
   renderer.setSize( container.clientWidth, container.clientHeight );
 
 }
+document.addEventListener("DOMContentLoaded",() => {
+  the_button.addEventListener("click", handleClick)
+})
 
 window.addEventListener( 'resize', onWindowResize );
 window.addEventListener('mousemove', onMouseMove, false);
 
 window.requestAnimationFrame(render);
+
+function handleClick(event) {
+  modal.style.display = "block";
+  closeBtn.addEventListener("click", () => {
+    modal.style.display = "none"
+  })
+}
 
 init();
