@@ -1,152 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>three.js webgl - OBJLoader + MTLLoader</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="main.css">
-	</head>
+<html>
 
-	<body>
-		<div id="info">
-		<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - OBJLoader + MTLLoader
-		</div>
+  <head>
 
-		<script type="module">
+    <title></title>
 
-			import * as THREE from '../build/three.module.js';
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
 
-			import { DDSLoader } from './jsm/loaders/DDSLoader.js';
-			import { MTLLoader } from './jsm/loaders/MTLLoader.js';
-			import { OBJLoader } from './jsm/loaders/OBJLoader.js';
+<!--<link rel="icon" href="https://discoverthreejs.com/favicon.ico" type="image/x-icon"> -->
 
-			var container;
+    <link href="styles/main.css" rel="stylesheet" type="text/css">    <!--
+      Include the main three.js script.
+      The global variable THREE will be
+      available for use in any scripts
+      loaded after this one.
+    -->
 
-			var camera, scene, renderer;
+    <script src="js/three.js-master/build/three.min.js"></script>
+    <!--
+    Include the OrbitControls script.
+    This must be included AFTER the three.js script as it
+    needs to use the global THREE variable
+  -->
 
-			var mouseX = 0, mouseY = 0;
+  <script src="js/three.js-master/examples/js/loaders/GLTFLoader.js"></script>
 
-			var windowHalfX = window.innerWidth / 2;
-			var windowHalfY = window.innerHeight / 2;
+  <script src="js/three.js-master/examples/js/libs/dat.gui.min.js"></script>
+  <!--
+    Include the GLTFLoader script. This also needs to be loaded after the three.js script
+  -->
+
+  <script src="js/three.js-master/examples/js/controls/OrbitControls.js"></script>
 
 
-			init();
-			animate();
+  <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer>
+  new Crate({
+    server: '784273291308564501', // Mindspace
+    channel: '786416946307661885' // #data-threejs
+  })
+</script>
+
+  </head>
+
+  <body>
+
+    <!-- <h1><a href="https://www.threejs.com/">  </a></h1> -->
+    <video id="video" scr="models/video.mp4"style="display:none" autoplay="true" muted="muted" ></video>
+
+    <video id="videoP" scr="models/video.mp4"style="display:none" autoplay="true" muted="muted" ></video>
+
+     <div id="scene-container">
+     <div id="level1"></div>
 
 
-			function init() {
+      <!-- This div will hold our scene-->
+    </div>
 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+    <div class="btn">
+            <button class="js-btn">Click to know more </button>
+          </div>
 
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-				camera.position.z = 250;
+          <div class="modal">
+           <div class="modal_content">
+            <span class="close">&times;</span>
+            <p> This is data. </p>
+           </div>
+          </div>
 
-				// scene
 
-				scene = new THREE.Scene();
 
-				var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
-				scene.add( ambientLight );
+    <footer>
 
-				var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
-				camera.add( pointLight );
-				scene.add( camera );
+      <!--
+        Finally, include the script that
+        runs your three.js app.
+      -->
+    <!--  <script src="js/app_gltf_newMaterials.js"></script> -->
 
-				// model
+      <script src="js/final-data-3js.js"></script>
 
-				var onProgress = function ( xhr ) {
+    </footer>
 
-					if ( xhr.lengthComputable ) {
-
-						var percentComplete = xhr.loaded / xhr.total * 100;
-						console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-
-					}
-
-				};
-
-				var onError = function () { };
-
-				var manager = new THREE.LoadingManager();
-				manager.addHandler( /\.dds$/i, new DDSLoader() );
-
-				// comment in the following line and import TGALoader if your asset uses TGA textures
-				// manager.addHandler( /\.tga$/i, new TGALoader() );
-
-				new MTLLoader( manager )
-					.setPath( 'models/obj/male02/' )
-					.load( 'male02_dds.mtl', function ( materials ) {
-
-						materials.preload();
-
-						new OBJLoader( manager )
-							.setMaterials( materials )
-							.setPath( 'models/obj/male02/' )
-							.load( 'male02.obj', function ( object ) {
-
-								object.position.y = - 95;
-								scene.add( object );
-
-							}, onProgress, onError );
-
-					} );
-
-				//
-
-				renderer = new THREE.WebGLRenderer();
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				container.appendChild( renderer.domElement );
-
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
-				//
-
-				window.addEventListener( 'resize', onWindowResize, false );
-
-			}
-
-			function onWindowResize() {
-
-				windowHalfX = window.innerWidth / 2;
-				windowHalfY = window.innerHeight / 2;
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-			}
-
-			function onDocumentMouseMove( event ) {
-
-				mouseX = ( event.clientX - windowHalfX ) / 2;
-				mouseY = ( event.clientY - windowHalfY ) / 2;
-
-			}
-
-			//
-
-			function animate() {
-
-				requestAnimationFrame( animate );
-				render();
-
-			}
-
-			function render() {
-
-				camera.position.x += ( mouseX - camera.position.x ) * .05;
-				camera.position.y += ( - mouseY - camera.position.y ) * .05;
-
-				camera.lookAt( scene.position );
-
-				renderer.render( scene, camera );
-
-			}
-
-		</script>
-
-	</body>
+  </body>
 </html>
