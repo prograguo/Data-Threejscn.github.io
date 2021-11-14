@@ -44,43 +44,9 @@
   </head>
 
   <body>
-
-    <!-- <h1><a href="https://www.threejs.com/">  </a></h1> -->
-    <video id="video" scr="models/video.mp4"style="display:none" autoplay="true" muted="muted" ></video>
-
-    <video id="videoP" scr="models/video.mp4"style="display:none" autoplay="true" muted="muted" ></video>
-
-     <div id="scene-container">
-     <div id="level1"></div>
-
-
-      <!-- This div will hold our scene-->
-    </div>
-
-    <div class="btn">
-            <button class="js-btn">Click to know more </button>
-          </div>
-
-          <div class="modal">
-           <div class="modal_content">
-            <span class="close">&times;</span>
-            <p> This is data. </p>
-           </div>
-          </div>
-
-
-
-    <footer>
-
-      <!--
-        Finally, include the script that
-        runs your three.js app.
-      -->
-    <!--  <script src="js/app_gltf_newMaterials.js"></script> -->
-
-      <script src="js/final-data-3js.js"></script>
-
-    </footer>
-
+    <div id="page1"></div>
+    <script>
+    $("#page1").load("js/three.js-master/examples/index.html");
+    </script>
   </body>
 </html>
